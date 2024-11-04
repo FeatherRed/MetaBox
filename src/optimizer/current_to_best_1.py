@@ -2,9 +2,9 @@ import numpy as np
 import scipy.stats as stats
 from optimizer.basic_optimizer import Basic_Optimizer
 
-class DE_rand_to_best_1(Basic_Optimizer):
+class DE_current_to_best_1(Basic_Optimizer):
     def __init__(self, config):
-        super(DE_rand_to_best_1, self).__init__()
+        super(DE_current_to_best_1, self).__init__()
         self.__dim = config.dim
         self.__MaxFEs = config.maxFEs
         self.__F = 0.9

@@ -53,7 +53,7 @@ from optimizer import (
     DE_rand_2,
     DE_best_1,
     DE_best_2,
-    DE_rand_to_best_1,
+    DE_current_to_best_1,
     AMCDE,
     JADE,
     DEAP_DE,
