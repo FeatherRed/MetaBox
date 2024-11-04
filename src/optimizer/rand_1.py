@@ -99,7 +99,7 @@ class DE_rand_1(Basic_Optimizer):
         x1 = group[r1]
         x2 = group[r2]
         x3 = group[r3]
-        v = x1 + self.F * (x2 - x3)
+        v = x1 + self.__F * (x2 - x3)
         return v
 
     def __binomial(self, x, v):

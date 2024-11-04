@@ -111,7 +111,7 @@ class DE_best_2(Basic_Optimizer):
         x2 = group[r2]
         x3 = group[r3]
         x4 = group[r4]
-        v = xb + self.F * (x1 - x2) + self.F * (x3 - x4)
+        v = xb + self.__F * (x1 - x2) + self.__F * (x3 - x4)
         return v
 
     def __binomial(self, x, v):
