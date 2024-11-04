@@ -80,9 +80,7 @@ class JDE21(Basic_Optimizer):
         self.log_index = 1
         self.cost = [self.gbest]
 
-    def __update(self,
-                 problem,       # the problem instance
-                 ):
+    def __update(self, problem):
         # initialize population
         NP = self.__NP
         dim = self.__dim
