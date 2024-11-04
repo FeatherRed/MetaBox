@@ -698,7 +698,11 @@ def post_processing_test_statics(log_dir: str, logger: Logger) -> None:
     logger.draw_test_cost(results['cost'],log_dir + 'pics/', logged=True, categorized=True)
     logger.draw_named_average_test_costs(results['cost'], log_dir + 'pics/',
                                         {'MetaBBO-RL': ['DE_DDQN_Agent', 'RL_HPSDE_Agent', 'LDE_Agent', 'QLPSO_Agent', 'RLEPSO_Agent', 'RL_PSO_Agent', 'DEDQN_Agent'],
-                                         'Classic Optimizer': ['DEAP_DE', 'DEAP_CMAES', 'DEAP_PSO', 'JDE21', 'NL_SHADE_LBC', 'GL_PSO', 'sDMS_PSO', 'MadDE', 'SAHLPSO', 'Random_search', 'AMCDE', 'JADE']},
+                                         'Classic Optimizer': ['DEAP_DE', 'DEAP_CMAES', 'DEAP_PSO', 'JDE21',
+                                                               'NL_SHADE_LBC', 'GL_PSO', 'sDMS_PSO', 'MadDE',
+                                                               'SAHLPSO', 'Random_search', 'AMCDE', 'JADE',
+                                                               'DE_rand_1', 'DE_rand_2', 'DE_best_1', 'DE_best_2', 'DE_rand_to_best_1']
+                                         },
                                         logged=False)
     logger.draw_rank_hist(results, random, log_dir + 'pics/')
     # logger.draw_boxplot(results['cost'],log_dir + 'pics/')

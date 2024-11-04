@@ -41,11 +41,6 @@ from optimizer import (
     NRLPSO_Optimizer,
     Symbol_Optimizer,
 
-    DEAP_DE,
-    JDE21,
-    MadDE,
-    NL_SHADE_LBC,
-
     DEAP_PSO,
     GL_PSO,
     sDMS_PSO,
@@ -53,8 +48,18 @@ from optimizer import (
 
     DEAP_CMAES,
     Random_search,
+
+    DE_rand_1,
+    DE_rand_2,
+    DE_best_1,
+    DE_best_2,
+    DE_rand_to_best_1,
     AMCDE,
-    JADE
+    JADE,
+    DEAP_DE,
+    JDE21,
+    MadDE,
+    NL_SHADE_LBC
 )
 matplotlib.use('Agg')
 

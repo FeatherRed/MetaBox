@@ -32,5 +32,11 @@ from .symbol_optimizer import *
 
 from .nrlpso_optimizer import *
 
+from .rand_1 import *
+from .rand_2 import *
+from .best_1 import *
+from .best_2 import *
+from .current_to_best_1 import *
+
 from .amcde import *
 from .jade import *
