@@ -40,7 +40,7 @@ class DE_rand_2(Basic_Optimizer):
     def __update(self, problem):
         self.__sort()
         NP, dim = self.__NP, self.__dim
-        v = self.__rand_1(self.__population)
+        v = self.__rand_2(self.__population)
 
         v[v < problem.lb] = (v[v < problem.lb] + problem.lb) / 2
         v[v > problem.ub] = (v[v > problem.ub] + problem.ub) / 2
