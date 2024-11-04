@@ -113,7 +113,7 @@ class Tester(object):
         if self.config.problem[-6:]=='-torch':
             self.config.problem=self.config.problem[:-6]
             
-        _, self.test_set = construct_problem_set(self.config)
+        _, self.test_set = construct_problem_set(self.config, self.config.testset_seed)
         # if 'L2L_Agent' in config.agent_for_cp or 'L2L_Agent' == config.agent:
         #     pre_problem=config.problem
         #     config.problem=pre_problem+'-torch'
