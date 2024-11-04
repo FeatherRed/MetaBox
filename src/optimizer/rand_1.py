@@ -4,7 +4,7 @@ from optimizer.basic_optimizer import Basic_Optimizer
 
 class DE_rand_1(Basic_Optimizer):
     def __init__(self, config):
-        super(DE_rand_1, self).__init__()
+        super(DE_rand_1, self).__init__(config)
         self.__dim = config.dim
         self.__MaxFEs = config.maxFEs
         self.__F = 0.9

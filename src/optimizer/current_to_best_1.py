@@ -4,7 +4,7 @@ from optimizer.basic_optimizer import Basic_Optimizer
 
 class DE_current_to_best_1(Basic_Optimizer):
     def __init__(self, config):
-        super(DE_current_to_best_1, self).__init__()
+        super(DE_current_to_best_1, self).__init__(config)
         self.__dim = config.dim
         self.__MaxFEs = config.maxFEs
         self.__F = 0.9
