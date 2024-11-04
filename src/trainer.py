@@ -10,6 +10,7 @@ import numpy as np
 import os
 import matplotlib
 import matplotlib.pyplot as plt
+import torch
 from agent import (
     DE_DDQN_Agent,
     DEDQN_Agent,
@@ -51,7 +52,9 @@ from optimizer import (
     SAHLPSO,
 
     DEAP_CMAES,
-    Random_search
+    Random_search,
+    AMCDE,
+    JADE
 )
 matplotlib.use('Agg')
 
@@ -59,6 +62,10 @@ matplotlib.use('Agg')
 class Trainer(object):
     def __init__(self, config):
         self.config = config
+        self.train_set, _= construct_problem_set(config, config.trainset_seed)
+        np.random.seed(config.seed)
+        torch.manual_seed(config.seed)
+        torch.cuda.manual_seed(config.seed)
         if config.resume_dir is None:
             self.agent = eval(config.train_agent)(config)
         else:
@@ -67,7 +74,6 @@ class Trainer(object):
                 self.agent = pickle.load(f)
             self.agent.update_setting(config)
         self.optimizer = eval(config.train_optimizer)(config)
-        self.train_set, self.test_set = construct_problem_set(config)
 
     def save_log(self, epochs, steps, cost, returns, normalizer):
         log_dir = self.config.log_dir + f'/train/{self.agent.__class__.__name__}/{self.config.run_time}/log/'
@@ -181,12 +187,19 @@ class Trainer(object):
                 self.draw_cost()
                 self.draw_average_cost()
                 self.draw_return()
+            if epoch == self.config.max_epoch:
+                save_epoch(self.config.agent_save_dir, 'Epoch' + str(epoch), self.agent)
+                # 101epoch
         
         self.draw_cost()
         self.draw_average_cost()
         self.draw_return()
 
-
+def save_epoch(dir, file_name, saving_class):
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    with open(dir + file_name + '.pkl', 'wb') as f:
+        pickle.dump(saving_class, f, -1)
 # class Trainer_l2l(object):
 #     def __init__(self, config):
 #         self.config = config

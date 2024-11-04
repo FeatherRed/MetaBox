@@ -53,7 +53,9 @@ from optimizer import (
 
     DEAP_CMAES,
     Random_search,
-    BayesianOptimizer
+    BayesianOptimizer,
+    AMCDE,
+    JADE
 )
 
 def cal_t0(dim, fes):

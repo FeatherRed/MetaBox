@@ -17,6 +17,9 @@ def get_config(args=None):
     parser.add_argument('--run_experiment', default=None, action='store_true', help='switch to run_experiment mode')
     parser.add_argument('--mgd_test', default=None, action='store_true', help='switch to mgd_test mode')
     parser.add_argument('--mte_test', default=None, action='store_true', help='switch to mte_test mode')
+    parser.add_argument('--seed', type = int, default = 0)
+    parser.add_argument('--trainset_seed', type = int, default = 0)
+    parser.add_argument('--testset_seed', type = int, default = 0)
 
     # Training parameters
     parser.add_argument('--max_learning_step', type=int, default=1500000, help='the maximum learning step for training')
@@ -32,7 +35,7 @@ def get_config(args=None):
                         help='learnable optimizer to compare')
     parser.add_argument('--n_checkpoint', type=int, default=20, help='number of training checkpoints')
     parser.add_argument('--resume_dir', type=str, help='directory to load previous checkpoint model')
-
+    parser.add_argument('--max_epoch', type = int, default = 500)
     # Testing parameters
     parser.add_argument('--agent', default=None, help='None: traditional optimizer, else Learnable optimizer')
     parser.add_argument('--agent_load_dir', type=str,

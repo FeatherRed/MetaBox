@@ -31,3 +31,6 @@ from .les_optimizer import *
 from .symbol_optimizer import *
 
 from .nrlpso_optimizer import *
+
+from .amcde import *
+from .jade import *
