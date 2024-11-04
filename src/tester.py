@@ -360,7 +360,8 @@ def rollout(config):
 
 def test_for_random_search(config):
     # get entire problem set
-    train_set, test_set = construct_problem_set(config)
+    train_set, _ = construct_problem_set(config, config.trainset_seed)
+    _, test_set = construct_problem_set(config, config.testset_seed)
     entire_set = train_set + test_set
     # get optimizer
     optimizer = Random_search(copy.deepcopy(config))
