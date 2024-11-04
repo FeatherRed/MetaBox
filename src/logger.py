@@ -701,7 +701,7 @@ def post_processing_test_statics(log_dir: str, logger: Logger) -> None:
                                          'Classic Optimizer': ['DEAP_DE', 'DEAP_CMAES', 'DEAP_PSO', 'JDE21',
                                                                'NL_SHADE_LBC', 'GL_PSO', 'sDMS_PSO', 'MadDE',
                                                                'SAHLPSO', 'Random_search', 'AMCDE', 'JADE',
-                                                               'DE_rand_1', 'DE_rand_2', 'DE_best_1', 'DE_best_2', 'DE_rand_to_best_1']
+                                                               'DE_rand_1', 'DE_rand_2', 'DE_best_1', 'DE_best_2', 'DE_current_to_best_1']
                                          },
                                         logged=False)
     logger.draw_rank_hist(results, random, log_dir + 'pics/')
