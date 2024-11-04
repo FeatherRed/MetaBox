@@ -46,6 +46,9 @@ from optimizer import (
     sDMS_PSO,
     SAHLPSO,
 
+    DEAP_CMAES,
+    Random_search,
+
     DE_rand_1,
     DE_rand_2,
     DE_best_1,
