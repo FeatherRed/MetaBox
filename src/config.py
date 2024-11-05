@@ -74,7 +74,7 @@ def get_config(args=None):
     parser.add_argument('--scratch_rollout', type=str, help='path of scratch models rollout result .pkl file')
 
     config = parser.parse_args(args)
-    config.maxFEs = 2000 * config.dim
+    config.maxFEs = 5000 * config.dim
     # for bo, maxFEs is relatively smaller due to time limit
     config.bo_maxFEs = 10 * config.dim
     config.n_logpoint = 50

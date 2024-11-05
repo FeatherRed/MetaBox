@@ -926,6 +926,8 @@ class BBOB_Dataset(Dataset):
         # get problem instances
         if instance_seed > 0:
             np.random.seed(instance_seed)
+        if difficulty == "easy":
+            small_set_func_id = [1, 2, 3, 4, 15, 16, 17, 21]
         train_set = []
         test_set = []
         assert upperbound >= 5., f'Argument upperbound must be at least 5, but got {upperbound}.'
@@ -946,8 +948,6 @@ class BBOB_Dataset(Dataset):
                 bias = 0
             instance = eval(f'F{id}')(dim=dim, shift=shift, rotate=H, bias=bias, lb=lb, ub=ub)
             if (difficulty == 'easy' and id not in small_set_func_id) or (difficulty == 'difficult' and id in small_set_func_id):
-                train_set.append(instance)
-            else:
                 test_set.append(instance)
         return BBOB_Dataset(train_set, train_batch_size), BBOB_Dataset(test_set, test_batch_size)
 
