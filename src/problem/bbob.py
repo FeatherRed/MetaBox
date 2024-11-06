@@ -948,7 +948,7 @@ class BBOB_Dataset(Dataset):
                 bias = 0
             instance = eval(f'F{id}')(dim=dim, shift=shift, rotate=H, bias=bias, lb=lb, ub=ub)
             if (difficulty == 'easy' and id not in small_set_func_id) or (difficulty == 'difficult' and id in small_set_func_id):
-                test_set.append(instance)
+                train_set.append(instance)
             else:
                 test_set.append(instance)
         return BBOB_Dataset(train_set, train_batch_size), BBOB_Dataset(test_set, test_batch_size)
