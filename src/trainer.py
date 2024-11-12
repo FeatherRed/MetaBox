@@ -192,8 +192,8 @@ class Trainer(object):
                 self.draw_cost()
                 self.draw_average_cost()
                 self.draw_return()
+            save_epoch(self.config.agent_save_dir, 'Epoch' + str(epoch), self.agent)
             if epoch == self.config.max_epoch:
-                save_epoch(self.config.agent_save_dir, 'Epoch' + str(epoch), self.agent)
                 break
                 # 101epoch
         
