@@ -124,7 +124,7 @@ class Tester(object):
         #     _,self.torch_test_set = construct_problem_set(config)
         #     config.problem=pre_problem
         
-        self.seed = range(51)
+        self.seed = range(1, 52)
         # initialize the dataframe for logging
         self.test_results = {'cost': {},
                              'fes': {},
@@ -174,14 +174,15 @@ class Tester(object):
             self.test_results['T2'][type(optimizer).__name__] = 0.
 
         for problem in self.test_set:
-            self.test_results['cost'][problem.__str__()] = {}
-            self.test_results['fes'][problem.__str__()] = {}
+            name = f"{problem.__str__()}_{problem.dim}" if self.config.mix_dim else problem.__str__()
+            self.test_results['cost'][name] = {}
+            self.test_results['fes'][name] = {}
             for agent_name in self.agent_name_list:
-                self.test_results['cost'][problem.__str__()][agent_name] = []  # 51 np.arrays
-                self.test_results['fes'][problem.__str__()][agent_name] = []  # 51 scalars
+                self.test_results['cost'][name][agent_name] = []  # 51 np.arrays
+                self.test_results['fes'][name][agent_name] = []  # 51 scalars
             for optimizer in self.t_optimizer_for_cp:
-                self.test_results['cost'][problem.__str__()][type(optimizer).__name__] = []  # 51 np.arrays
-                self.test_results['fes'][problem.__str__()][type(optimizer).__name__] = []  # 51 scalars
+                self.test_results['cost'][name][type(optimizer).__name__] = []  # 51 np.arrays
+                self.test_results['fes'][name][type(optimizer).__name__] = []  # 51 scalars
 
     def test(self):
         print(f'start testing: {self.config.run_time}')
@@ -214,9 +215,10 @@ class Tester(object):
                         if i == 0:
                             T2 += (end - start) * 1000  # ms
                             T1 += env.problem.T1
-                        self.test_results['cost'][problem.__str__()][self.agent_name_list[agent_id]].append(cost)
-                        self.test_results['fes'][problem.__str__()][self.agent_name_list[agent_id]].append(fes)
-                        pbar_info = {'problem': problem.__str__(),
+                        name = f"{problem.__str__()}_{problem.dim}" if self.config.mix_dim else problem.__str__()
+                        self.test_results['cost'][name][self.agent_name_list[agent_id]].append(cost)
+                        self.test_results['fes'][name][self.agent_name_list[agent_id]].append(fes)
+                        pbar_info = {'problem': name,
                                      'optimizer': self.agent_name_list[agent_id],
                                      'run': run,
                                      'cost': cost[-1],
@@ -247,9 +249,10 @@ class Tester(object):
                         if i == 0:
                             T1 += problem.T1
                             T2 += (end - start) * 1000  # ms
-                        self.test_results['cost'][problem.__str__()][type(optimizer).__name__].append(cost)
-                        self.test_results['fes'][problem.__str__()][type(optimizer).__name__].append(fes)
-                        pbar_info = {'problem': problem.__str__(),
+                        name = f"{problem.__str__()}_{problem.dim}" if self.config.mix_dim else problem.__str__()
+                        self.test_results['cost'][name][type(optimizer).__name__].append(cost)
+                        self.test_results['fes'][name][type(optimizer).__name__].append(fes)
+                        pbar_info = {'problem': name,
                                      'optimizer': type(optimizer).__name__,
                                      'run': run,
                                      'cost': cost[-1],
@@ -275,7 +278,7 @@ def rollout(config):
     if config.problem[-6:]=='-torch':
         config.problem=config.problem[:-6]
 
-    train_set,_=construct_problem_set(config)
+    train_set,_=construct_problem_set(config, config.trainset_seed)
     # if 'L2L_Agent' in config.agent_for_rollout:
     #     pre_problem=config.problem
     #     config.problem=pre_problem+'-torch'
@@ -303,17 +306,18 @@ def rollout(config):
     for optimizer_name in config.optimizer_for_rollout:
         optimizer_for_rollout.append(eval(optimizer_name)(copy.deepcopy(config)))
     for problem in train_set:
-        train_rollout_results['cost'][problem.__str__()] = {}
-        train_rollout_results['fes'][problem.__str__()] = {}
-        train_rollout_results['return'][problem.__str__()] = {}
+        name = f"{problem.__str__()}_{problem.dim}" if config.mix_dim else problem.__str__()
+        train_rollout_results['cost'][name] = {}
+        train_rollout_results['fes'][name] = {}
+        train_rollout_results['return'][name] = {}
         for agent_name in agent_for_rollout:
-            train_rollout_results['cost'][problem.__str__()][agent_name] = []
-            train_rollout_results['fes'][problem.__str__()][agent_name] = []
-            train_rollout_results['return'][problem.__str__()][agent_name] = []
+            train_rollout_results['cost'][name][agent_name] = []
+            train_rollout_results['fes'][name][agent_name] = []
+            train_rollout_results['return'][name][agent_name] = []
             for checkpoint in range(0,n_checkpoint+1):
-                train_rollout_results['cost'][problem.__str__()][agent_name].append([])
-                train_rollout_results['fes'][problem.__str__()][agent_name].append([])
-                train_rollout_results['return'][problem.__str__()][agent_name].append([])
+                train_rollout_results['cost'][name][agent_name].append([])
+                train_rollout_results['fes'][name][agent_name].append([])
+                train_rollout_results['return'][name][agent_name].append([])
 
     pbar_len = (len(agent_for_rollout)) * train_set.N * (n_checkpoint+1) * 5
     with tqdm(range(pbar_len), desc='Rollouting') as pbar:
@@ -337,12 +341,12 @@ def rollout(config):
                             cost.append(cost[-1])
                         fes=info['fes']
                         R=info['return']
+                        name = f"{problem.__str__()}_{problem.dim}" if config.mix_dim else problem.__str__()
+                        train_rollout_results['cost'][name][agent_name][checkpoint].append(cost)
+                        train_rollout_results['fes'][name][agent_name][checkpoint].append(fes)
+                        train_rollout_results['return'][name][agent_name][checkpoint].append(R)
 
-                        train_rollout_results['cost'][problem.__str__()][agent_name][checkpoint].append(cost)
-                        train_rollout_results['fes'][problem.__str__()][agent_name][checkpoint].append(fes)
-                        train_rollout_results['return'][problem.__str__()][agent_name][checkpoint].append(R)
-
-                        pbar_info = {'problem': problem.__str__(),
+                        pbar_info = {'problem': name,
                                     'agent': type(agent).__name__,
                                     'checkpoint': checkpoint,
                                     'run':run,
@@ -374,14 +378,15 @@ def test_for_random_search(config):
     test_results['T1'][type(optimizer).__name__] = 0.
     test_results['T2'][type(optimizer).__name__] = 0.
     for problem in entire_set:
-        test_results['cost'][problem.__str__()] = {}
-        test_results['fes'][problem.__str__()] = {}
-        test_results['cost'][problem.__str__()][type(optimizer).__name__] = []  # 51 np.arrays
-        test_results['fes'][problem.__str__()][type(optimizer).__name__] = []  # 51 scalars
+        name = f"{problem.__str__()}_{problem.dim}" if config.mix_dim else problem.__str__()
+        test_results['cost'][name] = {}
+        test_results['fes'][name] = {}
+        test_results['cost'][name][type(optimizer).__name__] = []  # 51 np.arrays
+        test_results['fes'][name][type(optimizer).__name__] = []  # 51 scalars
     # calculate T0
     test_results['T0'] = cal_t0(config.dim, config.maxFEs)
     # begin testing
-    seed = range(51)
+    seed = range(1, 52)
     pbar_len = len(entire_set) * 51
     with tqdm(range(pbar_len), desc='test for random search') as pbar:
         for i, problem in enumerate(entire_set):
@@ -399,9 +404,11 @@ def test_for_random_search(config):
                 if i == 0:
                     T1 += problem.T1
                     T2 += (end - start) * 1000  # ms
-                test_results['cost'][problem.__str__()][type(optimizer).__name__].append(cost)
-                test_results['fes'][problem.__str__()][type(optimizer).__name__].append(fes)
-                pbar_info = {'problem': problem.__str__(),
+
+                name = f"{problem.__str__()}_{problem.dim}" if config.mix_dim else problem.__str__()
+                test_results['cost'][name][type(optimizer).__name__].append(cost)
+                test_results['fes'][name][type(optimizer).__name__].append(fes)
+                pbar_info = {'problem': name,
                              'optimizer': type(optimizer).__name__,
                              'run': run,
                              'cost': cost[-1],
@@ -447,11 +454,12 @@ def mgd_test(config):
         test_results['T1'][agent_name] = 0.
         test_results['T2'][agent_name] = 0.
     for problem in test_set:
-        test_results['cost'][problem.__str__()] = {}
-        test_results['fes'][problem.__str__()] = {}
+        name = f"{problem.__str__()}_{problem.dim}" if config.mix_dim else problem.__str__()
+        test_results['cost'][name] = {}
+        test_results['fes'][name] = {}
         for agent_name in agent_name_list:
-            test_results['cost'][problem.__str__()][agent_name] = []  # 51 np.arrays
-            test_results['fes'][problem.__str__()][agent_name] = []  # 51 scalars
+            test_results['cost'][name][agent_name] = []  # 51 np.arrays
+            test_results['fes'][name][agent_name] = []  # 51 scalars
     # calculate T0
     test_results['T0'] = cal_t0(config.dim, config.maxFEs)
     # begin mgd_test
@@ -477,9 +485,10 @@ def mgd_test(config):
                     if i == 0:
                         T1 += env.problem.T1
                         T2 += (end - start) * 1000  # ms
-                    test_results['cost'][problem.__str__()][agent_name_list[agent_id]].append(cost)
-                    test_results['fes'][problem.__str__()][agent_name_list[agent_id]].append(fes)
-                    pbar_info = {'problem': problem.__str__(),
+                    name = f"{problem.__str__()}_{problem.dim}" if config.mix_dim else problem.__str__()
+                    test_results['cost'][name][agent_name_list[agent_id]].append(cost)
+                    test_results['fes'][name][agent_name_list[agent_id]].append(fes)
+                    pbar_info = {'problem': name,
                                  'optimizer': agent_name_list[agent_id],
                                  'run': run,
                                  'cost': cost[-1],

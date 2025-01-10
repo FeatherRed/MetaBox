@@ -911,7 +911,8 @@ class BBOB_Dataset(Dataset):
                      train_batch_size=1,
                      test_batch_size=1,
                      difficulty='easy',
-                     instance_seed=3849):
+                     instance_seed=3849,
+                     mix_dim = False):
         # get functions ID of indicated suit
         if suit == 'bbob':
             func_id = [i for i in range(1, 25)]     # [1, 24]
@@ -951,6 +952,29 @@ class BBOB_Dataset(Dataset):
                 train_set.append(instance)
             else:
                 test_set.append(instance)
+
+        if mix_dim:
+            new_dim = 20 if dim == 10 else 20
+            for id in func_id:
+                if shifted:
+                    shift = 0.8 * (np.random.random(new_dim) * (ub - lb) + lb)
+                else:
+                    shift = np.zeros(new_dim)
+                if rotated:
+                    H = rotate_gen(new_dim)
+                else:
+                    H = np.eye(new_dim)
+                if biased:
+                    bias = np.random.randint(1, 26) * 100
+                else:
+                    bias = 0
+                instance = eval(f'F{id}')(dim = new_dim, shift = shift, rotate = H, bias = bias, lb = lb, ub = ub)
+                if (difficulty == 'easy' and id not in small_set_func_id) or (
+                        difficulty == 'difficult' and id in small_set_func_id):
+                    train_set.append(instance)
+                else:
+                    test_set.append(instance)
+
         return BBOB_Dataset(train_set, train_batch_size), BBOB_Dataset(test_set, test_batch_size)
 
     def __getitem__(self, item):

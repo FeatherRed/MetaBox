@@ -87,7 +87,7 @@ class Trainer(object):
         return_save = np.stack((steps, returns),  0)
         np.save(log_dir+'return', return_save)
         for problem in self.train_set:
-            name = problem.__str__()
+            name = f"{problem.__str__()}_{problem.dim}" if self.config.mix_dim else problem.__str__()
             if len(cost[name]) == 0:
                 continue
             while len(cost[name]) < len(epochs):
@@ -102,7 +102,7 @@ class Trainer(object):
             os.makedirs(log_dir + 'pic/')
         for problem in self.train_set:
             if Name is None:
-                name = problem.__str__()
+                name = f"{problem.__str__()}_{problem.dim}" if self.config.mix_dim else problem.__str__()
             elif (isinstance(Name, str) and problem.__str__() != Name) or (isinstance(Name, list) and problem.__str__() not in Name):
                 continue
             else:
@@ -124,7 +124,7 @@ class Trainer(object):
         X = []
         Y = []
         for problem in self.train_set:
-            name = problem.__str__()
+            name = f"{problem.__str__()}_{problem.dim}" if self.config.mix_dim else problem.__str__()
             values = np.load(log_dir + 'log/' + name+'_cost.npy')
             x, y, n = values
             if normalize:
@@ -161,8 +161,9 @@ class Trainer(object):
         learn_steps = []
         epoch_steps = []
         for problem in self.train_set:
-            cost_record[problem.__str__()] = []
-            normalizer_record[problem.__str__()] = []
+            name = f"{problem.__str__()}_{problem.dim}" if self.config.mix_dim else problem.__str__()
+            cost_record[name] = []
+            normalizer_record[name] = []
         while not exceed_max_ls:
             learn_step = 0
             self.train_set.shuffle()
@@ -172,7 +173,7 @@ class Trainer(object):
                     exceed_max_ls, pbar_info_train = self.agent.train_episode(env)  # pbar_info -> dict
                     pbar.set_postfix(pbar_info_train)
                     pbar.update(1)
-                    name = problem.__str__()
+                    name = f"{problem.__str__()}_{problem.dim}" if self.config.mix_dim else problem.__str__()
                     learn_step = pbar_info_train['learn_steps']
                     cost_record[name].append(pbar_info_train['gbest'])
                     normalizer_record[name].append(pbar_info_train['normalizer'])

@@ -36,6 +36,9 @@ def get_config(args=None):
     parser.add_argument('--n_checkpoint', type=int, default=20, help='number of training checkpoints')
     parser.add_argument('--resume_dir', type=str, help='directory to load previous checkpoint model')
     parser.add_argument('--max_epoch', type = int, default = 500)
+
+    parser.add_argument('--mix_dim', action = 'store_true', help = "10D and 20D training and testing together")
+
     # Testing parameters
     parser.add_argument('--agent', default=None, help='None: traditional optimizer, else Learnable optimizer')
     parser.add_argument('--agent_load_dir', type=str,
