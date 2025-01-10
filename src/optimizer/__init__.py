@@ -26,6 +26,7 @@ from .random_search import *
 from .bayesian import *
 from .l2l_optimizer import *
 from .gleet_optimizer import *
+from .de_np import GLEET_Optimizer_de
 from .rl_das_optimizer import RL_DAS_Optimizer
 from .les_optimizer import *
 from .symbol_optimizer import Symbol_Optimizer

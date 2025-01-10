@@ -36,6 +36,7 @@ from optimizer import (
     RL_PSO_Optimizer,
     L2L_Optimizer,
     GLEET_Optimizer,
+    GLEET_Optimizer_de,
     RL_DAS_Optimizer,
     LES_Optimizer,
     NRLPSO_Optimizer,

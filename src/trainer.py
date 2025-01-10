@@ -36,6 +36,7 @@ from optimizer import (
     RL_PSO_Optimizer,
     L2L_Optimizer,
     GLEET_Optimizer,
+    GLEET_Optimizer_de,
     RL_DAS_Optimizer,
     LES_Optimizer,
     NRLPSO_Optimizer,
@@ -95,7 +96,7 @@ class Trainer(object):
                 normalizer[name].append(normalizer[name][-1])
             cost_save = np.stack((epochs, cost[name], normalizer[name]),  0)
             np.save(log_dir+name+'_cost', cost_save)
-            
+
     def draw_cost(self, Name=None, normalize=False):
         log_dir = self.config.log_dir + f'/train/{self.agent.__class__.__name__}/{self.config.run_time}/'
         if not os.path.exists(log_dir + 'pic/'):
@@ -116,7 +117,7 @@ class Trainer(object):
             plt.plot(x, y)
             plt.savefig(log_dir+f'pic/{name}_cost.png')
             plt.close()
-    
+
     def draw_average_cost(self, normalize=True):
         log_dir = self.config.log_dir + f'/train/{self.agent.__class__.__name__}/{self.config.run_time}/'
         if not os.path.exists(log_dir + 'pic/'):
