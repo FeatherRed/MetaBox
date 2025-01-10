@@ -75,9 +75,11 @@ def get_config(args=None):
     # mte_test(transfer_learning) parameters
     parser.add_argument('--pre_train_rollout', type=str, help='path of pre-train models rollout result .pkl file')
     parser.add_argument('--scratch_rollout', type=str, help='path of scratch models rollout result .pkl file')
+    parser.add_argument('--maxFEs', type = int, default = 20000)
 
     config = parser.parse_args(args)
-    config.maxFEs = 2000 * config.dim
+    # config.maxFEs = 2000 * config.dim
+
     # for bo, maxFEs is relatively smaller due to time limit
     config.bo_maxFEs = 10 * config.dim
     config.n_logpoint = 50
