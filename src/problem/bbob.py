@@ -928,7 +928,7 @@ class BBOB_Dataset(Dataset):
         if instance_seed > 0:
             np.random.seed(instance_seed)
         if difficulty == "easy":
-            small_set_func_id = [1, 2, 3, 4, 15, 16, 17, 21]
+            small_set_func_id = [1, 2, 3, 5, 15, 16, 17, 21]
         train_set = []
         test_set = []
         assert upperbound >= 5., f'Argument upperbound must be at least 5, but got {upperbound}.'
