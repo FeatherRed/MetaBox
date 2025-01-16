@@ -688,9 +688,10 @@ def post_processing_test_statics(log_dir: str, logger: Logger) -> None:
     # Generate excel tables
     if not os.path.exists(log_dir + 'tables/'):
         os.makedirs(log_dir + 'tables/')
+
+    gen_agent_performance_table(results, log_dir+'tables/')
     gen_overall_tab(results, log_dir+'tables/')
     gen_algorithm_complexity_table(results, log_dir+'tables/')
-    gen_agent_performance_table(results, log_dir+'tables/')
 
     # Generate figures
     if not os.path.exists(log_dir + 'pics/'):

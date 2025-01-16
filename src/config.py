@@ -77,6 +77,8 @@ def get_config(args=None):
     parser.add_argument('--scratch_rollout', type=str, help='path of scratch models rollout result .pkl file')
     parser.add_argument('--maxFEs', type = int, default = 20000)
 
+    parser.add_argument('--skip_cmaes', action='store_true')
+
     config = parser.parse_args(args)
     # config.maxFEs = 2000 * config.dim
 
@@ -109,9 +111,10 @@ def get_config(args=None):
     config.save_interval = config.max_learning_step // config.n_checkpoint
     config.log_interval = config.maxFEs // config.n_logpoint
 
-    if 'DEAP_CMAES' not in config.t_optimizer_for_cp:
-        config.t_optimizer_for_cp.append('DEAP_CMAES')
-    if 'Random_search' not in config.t_optimizer_for_cp:
-        config.t_optimizer_for_cp.append('Random_search')
+    if not config.skip_cmaes:
+        if 'DEAP_CMAES' not in config.t_optimizer_for_cp:
+            config.t_optimizer_for_cp.append('DEAP_CMAES')
+        if 'Random_search' not in config.t_optimizer_for_cp:
+            config.t_optimizer_for_cp.append('Random_search')
 
     return config
