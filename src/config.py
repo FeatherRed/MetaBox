@@ -79,6 +79,8 @@ def get_config(args=None):
 
     parser.add_argument('--skip_cmaes', action='store_true')
 
+    parser.add_argument('--test_run', type = int, default = 51)
+
     config = parser.parse_args(args)
     # config.maxFEs = 2000 * config.dim
 

@@ -193,7 +193,7 @@ class Tester(object):
         # calculate T1
         # T1 = cal_t1(self.test_set[0], self.config.dim, self.config.maxFEs)
         # self.test_results['T1'] = T1
-        pbar_len = (len(self.t_optimizer_for_cp) + len(self.agent_for_cp)) * self.test_set.N * 51
+        pbar_len = (len(self.t_optimizer_for_cp) + len(self.agent_for_cp)) * self.test_set.N * self.config.test_run
         with tqdm(range(pbar_len), desc='Testing') as pbar:
             for i,problem in enumerate(self.test_set):
 
@@ -201,7 +201,7 @@ class Tester(object):
                 for agent_id,(agent,optimizer) in enumerate(zip(self.agent_for_cp,self.l_optimizer_for_cp)):
                     T1 = 0
                     T2 = 0
-                    for run in range(51):
+                    for run in range(self.config.test_run):
                         start = time.perf_counter()
                         np.random.seed(self.seed[run])
                         problem.reset()
@@ -227,8 +227,8 @@ class Tester(object):
                         pbar.set_postfix(pbar_info)
                         pbar.update(1)
                     if i == 0:
-                        self.test_results['T1'][self.agent_name_list[agent_id]] = T1/51
-                        self.test_results['T2'][self.agent_name_list[agent_id]] = T2/51
+                        self.test_results['T1'][self.agent_name_list[agent_id]] = T1/ self.config.test_run
+                        self.test_results['T2'][self.agent_name_list[agent_id]] = T2/ self.config.test_run
                         if type(agent).__name__ == 'L2L_Agent':
                             self.test_results['T1'][self.agent_name_list[agent_id]] *= self.config.maxFEs/100
                             self.test_results['T2'][self.agent_name_list[agent_id]] *= self.config.maxFEs/100
@@ -236,7 +236,7 @@ class Tester(object):
                 for optimizer in self.t_optimizer_for_cp:
                     T1 = 0 
                     T2 = 0
-                    for run in range(51):
+                    for run in range(self.config.test_run):
                         start = time.perf_counter()
                         np.random.seed(self.seed[run])
 
@@ -261,8 +261,8 @@ class Tester(object):
                         pbar.set_postfix(pbar_info)
                         pbar.update(1)
                     if i == 0:
-                        self.test_results['T1'][type(optimizer).__name__] = T1/51
-                        self.test_results['T2'][type(optimizer).__name__] = T2/51
+                        self.test_results['T1'][type(optimizer).__name__] = T1/self.config.test_run
+                        self.test_results['T2'][type(optimizer).__name__] = T2/self.config.test_run
                         if type(optimizer).__name__ == 'BayesianOptimizer':
                             self.test_results['T1'][type(optimizer).__name__] *= (self.config.maxFEs/self.config.bo_maxFEs)
                             self.test_results['T2'][type(optimizer).__name__] *= (self.config.maxFEs/self.config.bo_maxFEs)
@@ -388,12 +388,12 @@ def test_for_random_search(config):
     test_results['T0'] = cal_t0(config.dim, config.maxFEs)
     # begin testing
     seed = range(1, 52)
-    pbar_len = len(entire_set) * 51
+    pbar_len = len(entire_set) * config.test_run
     with tqdm(range(pbar_len), desc='test for random search') as pbar:
         for i, problem in enumerate(entire_set):
             T1 = 0
             T2 = 0
-            for run in range(51):
+            for run in range(config.test_run):
                 start = time.perf_counter()
                 np.random.seed(seed[run])
                 info = optimizer.run_episode(problem)
@@ -417,8 +417,8 @@ def test_for_random_search(config):
                 pbar.set_postfix(pbar_info)
                 pbar.update(1)
             if i == 0:
-                test_results['T1'][type(optimizer).__name__] = T1 / 51
-                test_results['T2'][type(optimizer).__name__] = T2 / 51
+                test_results['T1'][type(optimizer).__name__] = T1 / config.test_run
+                test_results['T2'][type(optimizer).__name__] = T2 / config.test_run
     return test_results
 
 
